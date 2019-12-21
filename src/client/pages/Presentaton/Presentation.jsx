@@ -1,6 +1,13 @@
 import React from 'react';
 export class Presentation extends React.Component {
     state = {login: '', password: '', error: null};
+    constructor() {
+        super();
+    }
+
+    componentDidMount() {
+        fetch('/students')
+    }
 
     render() {
         return (
