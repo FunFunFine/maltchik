@@ -38,13 +38,12 @@ export class Home extends React.Component {
         return (
             <div>
                 <main className={s.mainContent}>
-
+                    <a href="/presentation">TO PRESENTATION</a>
                     <div className={s.titleBlock}>
                         <h1 className={s.title}>Quizer</h1>
                     </div>
                     {
                         this.state.sss === 'student' ? <Redirect to='/answers'/> :
-
                             <div className={s.buttons}>
                                 {!this.state.sss ?
                                     <div>
