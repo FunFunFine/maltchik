@@ -10,8 +10,9 @@ export class Question {
     }
 }
 export class Session {
-    constructor(questionsSetName) {
+    constructor(questionsSetName, teacherId) {
         this.questionsSetName = questionsSetName;
         this.currentQuestion = 0;
+        this.teacherId = teacherId;
     }
 }

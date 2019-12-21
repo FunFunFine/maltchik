@@ -2,8 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import uuid from 'uuid/v4';
-import { Question, Session } from './data';
 import cookieParser from 'cookie-parser';
+import { Quiz } from './Quiz';
 
 export const app = express();
 const staticPath = path.join(__dirname, '../../dist/');
@@ -18,84 +18,49 @@ app.use((err, req, res, next) => {
     res.status(500).end('Internal server error.');
 });
 
-class Quiz {
-    constructor() {
-        this.questionsSets = {
-            'math': '12345678'.split('').map(i =>
-                new Question(i, `${i} + ${i / 3}`, ['1', '2', '3', `${+i + i / 3}`], 3)
-            )
-        };
-        this.sessions = new Map();
-    }
-    startMathSession(id) {
-        this.startSession(id, 'math');
-    }
-    startSession(id, name) {
-        this.sessions.set(id, new Session(name));
-    }
-    isValidId(id) {
-        return this.sessions.has(id);
-    }
-    updateNext(id) {
-        const session = { ...this.sessions.get(id) }
-        const amount = this.questionsSets[session.questionsSetName].length
-        if (session.currentQuestion >= amount) {
-            return { hasNext: false }
-        } else {
-            session.currentQuestion++;
-            this.sessions.set(id, session)
-            return { hasNext: true, nextSession: session }
-        }
-    }
-    getCurrentQuestion(id) {
-        const session = this.sessions.get(id);
-        const qid = session.currentQuestion;
-        const { right, ...question } = this.questionsSets[session.questionsSetName][qid];
-        return question;
-    }
-    getCurrentQuestionForTeacher(id) {
-        const session = this.sessions.get(id);
-        const qid = session.currentQuestion;
-        const question = this.questionsSets[session.questionsSetName][qid];
-        return question;
-    }
-}
-
 const quiz = new Quiz()
 
 app.get('/teacher', (_, res) => {
-    const id = uuid();
-    quiz.startMathSession(id);
-    res.cookie('id', id);
-    res.json({ id });
+    const sessionId = uuid();
+    const teacherId = uuid();
+
+    quiz.startMathSession(sessionId, teacherId);
+    res.cookie('session_id', sessionId);
+    res.cookie('teacher_id', teacherId);
+    res.json({ sessionId, teacherId });
 });
 
-app.get('/teacher/:id/next', (req, res) => {
-    const id = req.params.id;
-    if (!quiz.isValidId(id)) {
-        res.sendStatus(403)
-    } else {
-        const { hasNext, nextSession } = quiz.updateNext(id);
-        if (!hasNext)
-            res.send('Finished')
-        else
-            res.send(nextSession)
-    }
+app.get('/teacher/next', (req, res) => {
+    const sessionId = req.cookies.session_id;
+    const teacherId = req.cookies.teacher_id;
+
+    if (!quiz.isValidId(sessionId, teacherId))
+        return void res.sendStatus(403);
+
+    const { hasNext, nextSession } = quiz.updateNext(sessionId);
+    if (!hasNext)
+        res.send('Finished')
+    else
+        res.send(nextSession)
 });
 
 app.post('/student', (req, res) => {
     const id = req.body.id;
-    res.cookie('id', id);
+    const studentId = uuid();
+
+    res.cookie('session_id', id);
+    res.cookie('student_id', studentId);
     res.send(200)
 });
 
 app.get('/student/questions/current', (req, res) => {
-    const id = req.cookies.id;
-    if (!quiz.isValidId(id)) {
+    const sessionId = req.cookies.session_id;
+
+    if (!quiz.isValidSessionId(sessionId)) {
         res.sendStatus(403)
     }
     else {
-        const question = quiz.getCurrentQuestion(id);
+        const question = quiz.getCurrentQuestion(sessionId);
         res.json(question)
     }
 });
