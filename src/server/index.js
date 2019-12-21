@@ -62,11 +62,8 @@ app.post('/student/answers/send', (req, res) => {
     if (!quiz.isValidSessionId(sessionId))
         return void res.send(403);
 
-    quiz.addStudent(sessionId)
-
-
-
-
+    quiz.registerStudentsAnswer(sessionId, studentId, questionId, answer);
+    res.send(200);
 });
 
 app.get('/student/questions/current', (req, res) => {

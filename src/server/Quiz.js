@@ -10,15 +10,28 @@ export class Quiz {
         this.startSession(id, 'math', teacherId);
     }
     startSession(id, name, teacherId) {
-        this.sessions.set(id, new Session(name,teacherId));
+        this.sessions.set(id, new Session(name, teacherId));
     }
     isValidTeacherSession(sessionId, teacherId) {
         return this.sessions.has(sessionId) && this.sessions.get(sessionId).teacherId === teacherId;
     }
-    
-    isValidSessionId(sessionId){
+
+    isValidSessionId(sessionId) {
         return this.sessions.has(sessionId);
     }
+
+    registerStudentsAnswer(sessionId, studentId, questionId, answer) {
+        const qs = this.questionsSets[this.sessions.get(sessionId).questionsSetName];
+        console.log(qs)
+        const question = qs
+                             .find(q => q.id === questionId);
+        console.log(question);
+
+        const isRight =question.answers.indexOf(answer) === question.right;
+        console.log(isRight);
+        this.sessions.get(sessionId).setAnswer(studentId, questionId, isRight);
+    }
+
     updateNext(id) {
         const session = { ...this.sessions.get(id) };
         const amount = this.questionsSets[session.questionsSetName].length;
