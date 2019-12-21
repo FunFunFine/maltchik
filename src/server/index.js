@@ -42,7 +42,7 @@ import cookieParser from 'cookie-parser';
 // });
 
 export const app = express();
-const staticPath = path.join(__dirname, '../client/');
+const staticPath = path.join(__dirname, '../../dist/');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
