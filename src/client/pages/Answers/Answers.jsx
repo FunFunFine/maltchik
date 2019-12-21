@@ -1,17 +1,37 @@
 import React from 'react';
+
 export class Answers extends React.Component {
     state = {login: '', password: '', error: null};
+
+    constructor() {
+        super();
+        this.state = {questionText: undefined, answers: undefined}
+    }
+
+    componentDidMount() {
+        fetch('/student/questions/current')
+            .then(x => x.json()
+                .then(y =>
+                    this.setState({questionText: y.questionText, answers: y.answers})
+                )
+            )
+    }
 
     render() {
         return (
             <div>
-                <header className="header">Theme. Question Number</header>
-                <main className="main-content">
-                    <button className="var1 var-button">button1</button>
-                    <button className="var2 var-button">button2</button>
-                    <button className="var3 var-button">button3</button>
-                    <button className="var4 var-button">button4</button>
-                </main>
+                {/*<div className="question">*/}
+                {/*    <span className="theme">Theme</span> <span className="theme">Question number</span>*/}
+                {/*    {this.state.questionText ?*/}
+                {/*        <div className="question-text">{this.state.questionText}</div> : undefined*/}
+                {/*    }*/}
+                {/*    <button className="next-button">→</button>*/}
+                {/*</div>*/}
+                <div className="answers">
+                    {this.state.answers ? this.state.answers.map((x, i) =>
+                            <button className={`answer${i} answer`}>{x}</button>)
+                        : undefined}
+                </div>
             </div>
         );
     }
