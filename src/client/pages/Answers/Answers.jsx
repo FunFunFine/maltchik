@@ -44,9 +44,9 @@ export class Answers extends React.Component {
                                                                                            onClick={(e) => this.onClick(e, x)}>{x}</button>)
                                 : undefined}
                         </div> :
-                        <p>
-                            {this.state.checked}
-                        </p>
+                        <div className={s.done}>
+                            SENT!
+                        </div>
                 }
             </div>
         );
