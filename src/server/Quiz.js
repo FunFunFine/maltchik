@@ -2,7 +2,13 @@ import { Question, Session } from './data';
 export class Quiz {
     constructor() {
         this.questionsSets = {
-            'math': '12345678'.split('').map(i => new Question(i, `${i} + ${i / 3}`, ['1', '2', '3', `${+i + i / 3}`], 3))
+            'math': [
+                new Question(i, 'В какую из этих игр играют не клюшкой?', ['Бильярд', 'Хоккей', 'Гольф', 'Поло'], 1),
+                new Question(i, 'Как называется детеныш норки?', ['Котенок','Щенок', 'Белек', 'Норик'], 1),
+                new Question(i, 'Где муха-цокотуха нашла денежку?', ['На лугу,', 'Во дворе', 'В поле', 'Во дворе'], 2),
+                new Question(i, 'Как называют брата жены?', ['Кум', 'Деверь', 'Свояк', 'Шурин'], 3),
+                new Question(i, 'Какой из языков программирования является декларативным?', ['Pascal', 'C#', 'SQL', 'Lisp'], 2),
+            ]
         };
         this.sessions = new Map();
     }
@@ -20,15 +26,27 @@ export class Quiz {
         return this.sessions.has(sessionId);
     }
 
+    getResults(sessionId) {
+        const session = this.sessions.get(sessionId);
+        const questions = this.questionsSets[session.questionsSetName];
+        const answers = session.answers;
+        console.log([...answers.entries()]);
+        return questions.map(q => {
+            return {
+                "student answers": [...answers.entries()].filter(a => a[1].id === q.id),
+                ...q
+            }
+        });
+    }
+
     registerStudentsAnswer(sessionId, studentId, questionId, answer) {
-        const qs = this.questionsSets[this.sessions.get(sessionId).questionsSetName];
-        console.log(qs)
-        const question = qs
-                             .find(q => q.id === questionId);
+        const question = this.questionsSets[this.sessions.get(sessionId).questionsSetName]
+            .find(q => q.id === questionId);
         console.log(question);
 
-        const isRight =question.answers.indexOf(answer) === question.right;
+        const isRight = question.answers.indexOf(answer) === question.right;
         console.log(isRight);
+
         this.sessions.get(sessionId).setAnswer(studentId, questionId, isRight);
     }
 

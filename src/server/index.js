@@ -65,7 +65,16 @@ app.post('/student/answers/send', (req, res) => {
     quiz.registerStudentsAnswer(sessionId, studentId, questionId, answer);
     res.send(200);
 });
+app.get('/teacher/results', (req, res) => {
+    const sessionId = req.cookies.session_id;
+    const teacherId = req.cookies.teacher_id;
 
+    if (!quiz.isValidTeacherSession(sessionId, teacherId))
+        return void res.sendStatus(403);
+
+    const results = quiz.getResults(sessionId, teacherId);
+    res.json(results);
+});
 app.get('/student/questions/current', (req, res) => {
     const sessionId = req.cookies.session_id;
 
