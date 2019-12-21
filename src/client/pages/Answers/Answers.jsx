@@ -6,7 +6,7 @@ export class Answers extends React.Component {
 
     constructor() {
         super();
-        this.state = {questionText: undefined, answers: undefined};
+        this.state = {questionText: undefined, answers: undefined, id: undefined};
         console.log(this.state);
 
     }
@@ -16,28 +16,38 @@ export class Answers extends React.Component {
             .then(x => {
                     x.json()
                         .then(y => {
-                                console.log('y');
-                                console.log(y);
-                                this.setState({questionText: y.questionText, answers: y.answers})
+                                this.setState({questionText: y.questionText, answers: y.answers, id: y.id})
                             }
                         )
                 }
             );
     }
 
-    onClick = () => {
-
+    onClick = (e, val) => {
+        console.log(val);
+        fetch('/student/answer/send', {
+            method: 'POST',
+            body: JSON.stringify({question_id: this.state.id, answer: val})
+        }).then(x => {
+            this.setState({checked: val});
+        });
     };
 
     render() {
         console.log(this.state);
         return (
             <div>
-                <div className={s.answers}>
-                    {this.state.answers ? this.state.answers.map((x, i) => <button className={s.answer}
-                                                                                   onClick={this.onClick}>{x}</button>)
-                        : undefined}
-                </div>
+                {
+                    !this.state.checked ?
+                        <div className={s.answers}>
+                            {this.state.answers ? this.state.answers.map((x, i) => <button className={s.answer} value={x}
+                                                                                           onClick={(e) => this.onClick(e, x)}>{x}</button>)
+                                : undefined}
+                        </div> :
+                        <p>
+                            {this.state.checked}
+                        </p>
+                }
             </div>
         );
     }
