@@ -53,6 +53,12 @@ class Quiz {
         const { right, ...question } = this.questionsSets[session.questionsSetName][qid];
         return question;
     }
+    getCurrentQuestionForTeacher(id) {
+        const session = this.sessions.get(id);
+        const qid = session.currentQuestion;
+        const question = this.questionsSets[session.questionsSetName][qid];
+        return question;
+    }
 }
 
 const quiz = new Quiz()
@@ -80,10 +86,11 @@ app.get('/teacher/:id/next', (req, res) => {
 app.post('/student', (req, res) => {
     const id = req.body.id;
     res.cookie('id', id);
-})
+    res.send(200)
+});
 
-app.get('/student/currentQuestion', (req, res) => {
-    const id = req.cookie.id;
+app.get('/student/questions/current', (req, res) => {
+    const id = req.cookies.id;
     if (!quiz.isValidId(id)) {
         res.sendStatus(403)
     }
@@ -94,13 +101,13 @@ app.get('/student/currentQuestion', (req, res) => {
 });
 
 
-app.get('/teacher/currentQuestion', (req, res) => {
-    const id = req.cookie.id;
+app.get('/teacher/question/current', (req, res) => {
+    const id = req.cookies.id;
     if (!quiz.isValidId(id)) {
         res.sendStatus(403)
     }
     else {
-        const question = quiz.getCurrentQuestion(id);
+        const question = quiz.getCurrentQuestionForTeacher(id);
         res.json(question)
     }
 });
