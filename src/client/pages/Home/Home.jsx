@@ -7,11 +7,11 @@ export class Home extends React.Component {
     }
 
     submitStudent = () => {
-
+        fetch('/student').then(x => {console.log(x.json())})
     };
 
     submitTeacher = () => {
-        fetch('/teacher').then(x => {console.log(x.json())})
+        fetch('/teacher').then(x => {console.log(x.json())});
     };
 
     onChange = (event) => {
