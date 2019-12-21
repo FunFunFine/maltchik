@@ -1,7 +1,77 @@
 .titleBlock
 {
-    background-color: red;
     width: 100%;
+    height: 200px;
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.mainContent
+{
+    height: 100vm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.title
+{
+    font-size: 50px;
+}
+
+.buttons
+{
+    height: 300px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.inputText
+{
+    display: block;
+}
+
+.join
+{
+    width: 200px;
+    height: 100px;
+    background-color: #00cb1c;
+    border: none;
+    color: white;
+    border-radius: 30px;
+    font-size: 20px;
+}
+
+.createButton
+{
+    width: 200px;
+    height: 100px;
+    background-color: #00f;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 30px;
+}
+
+.createButton:hover
+{
+    opacity: .5;
+}
+
+.join:hover
+{
+    opacity: .5;
+}
+
+.form
+{
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    justify-content: space-around;
 }
