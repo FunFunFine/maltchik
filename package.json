@@ -12,6 +12,9 @@
     "type": "git",
     "url": "git+https://github.com/FunFunFine/maltchik.git"
   },
+  "engines": {
+    "node": "13.x"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
