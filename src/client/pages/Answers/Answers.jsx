@@ -1,35 +1,41 @@
 import React from 'react';
+import s from './Answers.css';
 
 export class Answers extends React.Component {
     state = {login: '', password: '', error: null};
 
     constructor() {
         super();
-        this.state = {questionText: undefined, answers: undefined}
+        this.state = {questionText: undefined, answers: undefined};
+        console.log(this.state);
+
     }
 
     componentDidMount() {
         fetch('/student/questions/current')
-            .then(x => x.json()
-                .then(y =>
-                    this.setState({questionText: y.questionText, answers: y.answers})
-                )
-            )
+            .then(x => {
+                    x.json()
+                        .then(y => {
+                                console.log('y');
+                                console.log(y);
+                                this.setState({questionText: y.questionText, answers: y.answers})
+                            }
+                        )
+                }
+            );
     }
 
+    onClick = () => {
+
+    };
+
     render() {
+        console.log(this.state);
         return (
             <div>
-                {/*<div className="question">*/}
-                {/*    <span className="theme">Theme</span> <span className="theme">Question number</span>*/}
-                {/*    {this.state.questionText ?*/}
-                {/*        <div className="question-text">{this.state.questionText}</div> : undefined*/}
-                {/*    }*/}
-                {/*    <button className="next-button">→</button>*/}
-                {/*</div>*/}
-                <div className="answers">
-                    {this.state.answers ? this.state.answers.map((x, i) =>
-                            <button className={`answer${i} answer`}>{x}</button>)
+                <div className={s.answers}>
+                    {this.state.answers ? this.state.answers.map((x, i) => <button className={s.answer}
+                                                                                   onClick={this.onClick}>{x}</button>)
                         : undefined}
                 </div>
             </div>

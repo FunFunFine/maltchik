@@ -1,10 +1,11 @@
 import React from 'react';
 import s from './Home.css';
+import {Redirect} from "react-router";
 
 export class Home extends React.Component {
     constructor() {
         super();
-        this.state = {token: '', tokenTeacher: undefined};
+        this.state = {token: '', tokenTeacher: undefined, sss: undefined};
     }
 
     submitStudent = () => {
@@ -13,16 +14,19 @@ export class Home extends React.Component {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: {
+            body: JSON.stringify({
                 id: this.state.token
-            }
+            })
+        }).then(_ => {
+            this.setState({sss: 'student'})
         });
     };
 
     submitTeacher = () => {
         fetch('/teacher',)
             .then(x => {
-                x.json().then(y => this.setState({tokenTeacher: y.id}))
+                x.json()
+                    .then(y => this.setState({tokenTeacher: y.sessionId, sss: 'teacher'}))
             });
     };
 
@@ -32,21 +36,36 @@ export class Home extends React.Component {
 
     render() {
         return (
-            <main className={s.mainContent}>
-                <div className={s.titleBlock}>
-                    <h1 className={s.title}>Quizer</h1>
-                </div>
-                <div className={s.buttons}>
-                    <button className={s.createButton} onClick={this.submitTeacher}>Create quiz</button>
-                    {this.state.tokenTeacher ? <code>{this.state.tokenTeacher}</code>: undefined}
-                    <form className={s.form}>
-                        <input type="submit" id="join" className={s.join} value="Join quiz"
-                               onClick={this.submitStudent}/>
-                        <input type="text" value={this.state.token} required placeholder="Quiz ID"
-                               className={s.inputText} onChange={this.onChange}/>
-                    </form>
-                </div>
-            </main>
+            <div>
+                <main className={s.mainContent}>
+
+                    <div className={s.titleBlock}>
+                        <h1 className={s.title}>Quizer</h1>
+                    </div>
+                    {
+                        this.state.sss === 'student' ? <Redirect to='/answers'/> :
+
+                            <div className={s.buttons}>
+                                {!this.state.sss ?
+                                    <div>
+                                        <button className={s.createButton} onClick={this.submitTeacher}>
+                                            Create quiz
+                                        </button>
+                                    </div> : <code>{this.state.tokenTeacher}</code>
+                                }
+
+                                <button className={s.join} onClick={this.submitStudent}>
+                                    Join quiz
+                                </button>
+                                <input type="text" value={this.state.token} required placeholder="Quiz ID"
+                                       className={s.inputText} onChange={this.onChange}/>
+
+                            </div>
+
+                    }
+                </main>
+            </div>
         );
+
     }
 }
