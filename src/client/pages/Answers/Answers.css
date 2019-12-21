@@ -1,0 +1,39 @@
+html
+{
+    padding: 0;
+    margin: 0;
+}
+
+body
+{
+    padding: 0;
+    margin: 0;
+}
+
+.answers
+{
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+}
+
+.answer
+{
+    font-size: 20px;
+    color: #fff;
+    background-color: #00f;
+    width: 50%;
+    height: 50vh;
+    border: 2px solid #000;
+}
+
+.answer:hover
+{
+    opacity: .7;
+}
+
+.answer:focus
+{
+    color: black;
+    background-color: #fdff09;
+}

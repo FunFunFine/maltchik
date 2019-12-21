@@ -1,5 +1,5 @@
 import React from 'react';
-
+import s from './Answers.css';
 export class Answers extends React.Component {
     state = {login: '', password: '', error: null};
 
@@ -30,9 +30,8 @@ export class Answers extends React.Component {
         console.log(this.state);
         return (
             <div>
-                <div className="answers">
-                    {this.state.answers ? this.state.answers.map((x, i) =>
-                            <button className={`answer${i} answer`}>{x}</button>)
+                <div className={s.answers}>
+                    {this.state.answers ? this.state.answers.map((x, i) => <button className={s.answer}>{x}</button>)
                         : undefined}
                 </div>
             </div>
