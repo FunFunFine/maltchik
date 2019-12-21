@@ -9,7 +9,7 @@ export const app = express();
 const staticPath = path.join(__dirname, '../../dist/');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(staticPath));
 
 app.use(cookieParser());
@@ -29,6 +29,7 @@ class Question {
         this.right = right;
     }
 }
+
 const questionsSets = {
     'math': '12345678'.split('').map(i =>
         new Question(i, `${i} + ${i / 3}`, ['1', '2', '3', `${+i + i / 3}`], 3)
@@ -41,6 +42,7 @@ class Session {
         this.currentQuestion = 0;
     }
 }
+
 const sessions = new Map()
 sessions.set('test')
 
@@ -58,7 +60,7 @@ app.get('/teacher/:id/next', (req, res) => {
     if (!sessions.has(id)) {
         res.sendStatus(403)
     } else {
-        const session = { ...sessions.get(id) }
+        const session = {...sessions.get(id)}
         const amount = questionsSets[session.questionsSetName].length
         if (session.currentQuestion >= amount) {
             res.sendStatus(200).send("ВСЕ")
@@ -81,5 +83,17 @@ app.get('/student/:id', (req, res) => {
 })
 
 app.get('/', (_, response) => {
-    response.sendFile('index.html', { root: staticPath });
+    response.sendFile('index.html', {root: staticPath});
+});
+
+app.get('/home', (_, response) => {
+    response.sendFile('index.html', {root: staticPath});
+});
+
+app.get('/answers', (_, response) => {
+    response.sendFile('index.html', {root: staticPath});
+});
+
+app.get('/presentation', (_, response) => {
+    response.sendFile('index.html', {root: staticPath});
 });
