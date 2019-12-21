@@ -30,7 +30,7 @@ export class Home extends React.Component {
                     <form className={s.form}>
                         <input type="submit" id="join" className={s.join} value="Join quiz" onClick={this.submitStudent}/>
                         <input type="text" value={this.state.token} required placeholder="Quiz ID" className={s.inputText} onChange={this.onChange}/>
-|                    </form>
+                    </form>
                 </div>
             </main>
         );
