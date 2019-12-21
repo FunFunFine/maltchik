@@ -25,9 +25,11 @@ export class Answers extends React.Component {
 
     onClick = (e, val) => {
         console.log(val);
-        fetch('/student/answer/send', {
+        console.log(this.state.id);
+        fetch('/student/answers/send', {
             method: 'POST',
-            body: JSON.stringify({question_id: this.state.id, answer: val})
+            body: JSON.stringify({question_id: this.state.id, answer: val}),
+            headers: {'Content-Type': 'application/json'}
         }).then(x => {
             this.setState({checked: val});
         });
