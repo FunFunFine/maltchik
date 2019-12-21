@@ -60,6 +60,7 @@ const quiz = new Quiz()
 app.get('/teacher', (_, res) => {
     const id = uuid();
     quiz.startMathSession(id);
+    res.cookie('id', id);
     res.json({ id });
 });
 
@@ -73,14 +74,16 @@ app.get('/teacher/:id/next', (req, res) => {
             res.send('Finished')
         else
             res.send(nextSession)
-
-
     }
 });
 
+app.post('/student', (req, res) => {
+    const id = req.body.id;
+    res.cookie('id', id);
+})
 
-app.get('/student/:id', (req, res) => {
-    const id = req.params['id'];
+app.get('/student/currentQuestion', (req, res) => {
+    const id = req.cookie.id;
     if (!quiz.isValidId(id)) {
         res.sendStatus(403)
     }
@@ -88,7 +91,20 @@ app.get('/student/:id', (req, res) => {
         const question = quiz.getCurrentQuestion(id);
         res.json(question)
     }
-})
+});
+
+
+app.get('/teacher/currentQuestion', (req, res) => {
+    const id = req.cookie.id;
+    if (!quiz.isValidId(id)) {
+        res.sendStatus(403)
+    }
+    else {
+        const question = quiz.getCurrentQuestion(id);
+        res.json(question)
+    }
+});
+
 
 app.get('/', (_, response) => {
     response.sendFile('index.html', { root: staticPath });
