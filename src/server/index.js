@@ -34,7 +34,7 @@ app.get('/teacher/next', (req, res) => {
     const sessionId = req.cookies.session_id;
     const teacherId = req.cookies.teacher_id;
 
-    if (!quiz.isValidId(sessionId, teacherId))
+    if (!quiz.isValidTeacherSession(sessionId, teacherId))
         return void res.sendStatus(403);
 
     const { hasNext, nextSession } = quiz.updateNext(sessionId);
@@ -53,6 +53,22 @@ app.post('/student', (req, res) => {
     res.send(200)
 });
 
+app.post('/student/answers/send', (req, res) => {
+    const answer = req.body.answer;
+    const questionId = req.body.question_id;
+    const sessionId = req.cookies.session_id;
+    const studentId = req.cookies.student_id;
+
+    if (!quiz.isValidSessionId(sessionId))
+        return void res.send(403);
+
+    quiz.addStudent(sessionId)
+
+
+
+
+});
+
 app.get('/student/questions/current', (req, res) => {
     const sessionId = req.cookies.session_id;
 
@@ -68,7 +84,7 @@ app.get('/student/questions/current', (req, res) => {
 
 app.get('/teacher/questions/current', (req, res) => {
     const id = req.cookies.id;
-    if (!quiz.isValidId(id)) {
+    if (!quiz.isValidTeacherSession(id)) {
         res.sendStatus(403)
     }
     else {
