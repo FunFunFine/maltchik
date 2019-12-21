@@ -1,5 +1,64 @@
-.question
-{
+.question {
     position: relative;
-    height: 50%;
+    height: 100px;
+}
+
+html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.answers {
+    height: calc(100% - 100px);
+    width: 100%;
+    display: inline-block;
+}
+
+.answer {
+    font-size: 20px;
+    color: #fff;
+    background-color: #00f;
+    width: 50%;
+    height: calc(50vh - 100px);
+    border: 2px solid #000;
+}
+
+.answer:hover {
+    opacity: .7;
+}
+
+.answer:focus {
+    color: black;
+    background-color: #fdff09;
+}
+
+.theme {
+    height: 300px;
+    width: 100%;
+    display: block;
+}
+
+.arrow {
+    width: 100%;
+    background-image: linear-gradient(to right, #2b5876 0%, #4e4376 51%, #2b5876 100%);
+    color: white;
+    height: 100%;
+    float: right;
+    display: inline-block;
+}
+
+.questionText {
+    text-align: center;
+    font-size: 40px;
+    width: 100%;
+    background-image: linear-gradient(to right, #2b5876 0%, #4e4376 51%, #2b5876 100%);
+    color: white;
+    height: 100%;
+    float: right;
+    display: inline-block;
 }

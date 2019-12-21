@@ -42,6 +42,7 @@ export class Quiz {
     registerStudentsAnswer(sessionId, studentId, questionId, answer) {
         const question = this.questionsSets[this.sessions.get(sessionId).questionsSetName]
             .find(q => q.id === questionId);
+
         console.log(question);
 
         const isRight = question.answers.indexOf(answer) === question.right;

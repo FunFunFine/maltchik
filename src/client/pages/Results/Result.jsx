@@ -1,19 +1,17 @@
 import React from 'react';
 import s from './Presentation.css';
 
-export class Presentation extends React.Component {
-    state = {login: '', password: '', error: null};
-
+export class Result extends React.Component {
     constructor() {
         super();
-        this.state = {questionText: undefined, answers: undefined}
+        this.state = {result: undefined}
     }
 
     componentDidMount() {
-        fetch('/student/questions/current')
+        fetch('/teacher/result')
             .then(x => x.json()
                 .then(y =>
-                    this.setState({questionText: y.questionText, answers: y.answers})
+                    this.setState({result: y})
                 )
             )
     }
