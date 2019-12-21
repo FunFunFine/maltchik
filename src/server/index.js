@@ -58,7 +58,9 @@ app.post('/student/answers/send', (req, res) => {
     const questionId = req.body.question_id;
     const sessionId = req.cookies.session_id;
     const studentId = req.cookies.student_id;
-
+    console.log(1);
+    console.log(questionId);
+    console.log(answer);
     if (!quiz.isValidSessionId(sessionId))
         return void res.send(403);
 
