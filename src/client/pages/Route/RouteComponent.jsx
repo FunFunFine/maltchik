@@ -11,9 +11,9 @@ export function RouteComponent() {
         <BrowserRouter>
             <Switch>
                 <Route path="/" exact={true} component={RedirectComponent}/>
-                <Route path="/home" exact={true} component={Home}/>
-                <Route path="/answers" exact={true} component={Answers}/>
-                <Route path="/presentation" exact={true} component={Presentation}/>
+                <Route path="/home" component={Home}/>
+                <Route path="/answers" component={Answers}/>
+                <Route path="/presentation" component={Presentation}/>
             </Switch>
         </BrowserRouter>
     );
