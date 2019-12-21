@@ -26,8 +26,8 @@ export class Answers extends React.Component {
     }
 
     onClick = () => {
-        
-    }
+
+    };
 
     render() {
         console.log(this.state);

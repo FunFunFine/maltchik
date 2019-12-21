@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './presentation';
+import s from './Presentation.css';
 export class Presentation extends React.Component {
     state = {login: '', password: '', error: null};
 
