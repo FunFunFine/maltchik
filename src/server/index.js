@@ -1,45 +1,9 @@
-#!/usr/bin/env nodejs
-
 import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
+import uuid from 'uuid/v4';
 
-// import passport from 'passport';
-// import mongoose from 'mongoose';
-// import session from 'express-session';
 import cookieParser from 'cookie-parser';
-
-// const mongoHost = process.env.MONGO_HOST || 'localhost';
-// const mongoPort = process.env.MONGO_PORT || 27017;
-// const databaseName = 'staff-db';
-// const mongoUrl = `mongodb://${mongoHost}:${mongoPort}/${databaseName}`;
-
-// passport.use(new LocalStrategy(
-//     async function (username, password, done) {
-//         const user = await usersCollection.findUserByUsername(username).catch(() => null);
-//         if (!user) {
-//             return done(null, false, { message: 'Unknown User' });
-//         }
-//         if (!matchPasswordHashes(password, user.password)) {
-//             return done(null, false, { message: 'Invalid password' });
-//         }
-//         return done(null, user);
-//     }
-// ));
-//
-// passport.serializeUser(function (user, done) {
-//     done(null, user.id);
-// });
-//
-// passport.deserializeUser(async (id, done) => {
-//     const user = await usersCollection.findUser(id);
-//     done(null, {
-//         username: user.username,
-//         id: user.id,
-//         biography: user.biography,
-//         chatId: user.chatId
-//     });
-// });
 
 export const app = express();
 const staticPath = path.join(__dirname, '../client/');
@@ -47,26 +11,75 @@ const staticPath = path.join(__dirname, '../client/');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(staticPath));
-// app.use(session({
-//     store: new MongoStore({
-//         url: mongoUrl
-//     }),
-//     secret: sessionsSecretKey,
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//         maxAge: 1000 * 60 * 60 * 24
-//     }
-// }));
-// app.use(passport.initialize());
-// app.use(passport.session(sessionsSecretKey));
+
 app.use(cookieParser());
 app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).end('Internal server error.');
 });
 
+//-----------------------
+class Question {
+    constructor(id, questionText, answers, right) {
+        this.id = id || uuid();
+        this.questionText = questionText;
+        this.answers = answers;
+        if (right >= answers.length)
+            throw "There are not enough answers";
+        this.right = right;
+    }
+}
+const questionsSets = {
+    'math': '12345678'.split('').map(i =>
+        new Question(i, `${i} + ${i / 3}`, ['1', '2', '3', `${+i + i / 3}`], 3)
+    )
+}
 
-app.get('/', function (request, response) {
+class Session {
+    constructor(questionsSetName) {
+        this.questionsSetName = questionsSetName;
+        this.currentQuestion = 0;
+    }
+}
+const sessions = new Map()
+sessions.set('test')
+
+
+//-----
+
+app.get('/teacher', (_, res) => {
+    const id = uuid();
+    sessions.set(id, new Session('math'))
+    res.send(id);
+})
+
+app.get('/teacher/:id/next', (req, res) => {
+    const id = req.params.id;
+    if (!sessions.has(id)) {
+        res.sendStatus(403)
+    } else {
+        const session = { ...sessions.get(id) }
+        const amount = questionsSets[session.questionsSetName].length
+        if (session.currentQuestion >= amount) {
+            res.sendStatus(200).send("ВСЕ")
+        } else {
+            session.currentQuestion++;
+            sessions.set(id, session)
+            res.send(session)
+        }
+    }
+})
+
+
+app.get('/student/:id', (req, res) => {
+    const id = req.params['id'];
+    if (!sessions.has(id)) {
+        res.sendStatus(403)
+    } else {
+        res.send(sessions.get(id))
+    }
+})
+
+app.get('/', (_, response) => {
     response.sendFile('index.html', { root: staticPath });
 });
