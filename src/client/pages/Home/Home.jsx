@@ -38,7 +38,6 @@ export class Home extends React.Component {
         return (
             <div>
                 <main className={s.mainContent}>
-                    <a href="/presentation">TO PRESENTATION</a>
                     <div className={s.titleBlock}>
                         <h1 className={s.title}>Quizer</h1>
                     </div>
@@ -62,6 +61,7 @@ export class Home extends React.Component {
                             </div>
 
                     }
+                    <a href="/presentation">TO PRESENTATION</a>
                 </main>
             </div>
         );
