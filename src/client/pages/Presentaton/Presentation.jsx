@@ -18,20 +18,24 @@ export class Presentation extends React.Component {
             )
     }
 
+    click = (e) => {
+        fetch('/teacher/next')
+    };
+
+
     render() {
         return (
             <div className="main-content">
                 <div className={s.question}>
-                    <span className="theme">Theme</span> <span className="theme">Question number</span>
                     {
                         this.state.questionText ?
-                            <div className="question-text">{this.state.questionText}</div> : undefined
+                            <div className={s.questionText}>{this.state.questionText}</div> : undefined
                     }
-                    <button className="next-button">→</button>
+                    <button className={s.arrow} onClick={this.click}>→</button>
                 </div>
                 <div className="answers">
                     {this.state.answers ? this.state.answers.map(x => <button
-                        className={s.answer}>{x}</button>) : undefined}
+                        className={s.answer} >{x}</button>) : undefined}
                 </div>
             </div>
         );
