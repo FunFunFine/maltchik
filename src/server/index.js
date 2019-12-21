@@ -101,7 +101,7 @@ app.get('/student/questions/current', (req, res) => {
 });
 
 
-app.get('/teacher/question/current', (req, res) => {
+app.get('/teacher/questions/current', (req, res) => {
     const id = req.cookies.id;
     if (!quiz.isValidId(id)) {
         res.sendStatus(403)
